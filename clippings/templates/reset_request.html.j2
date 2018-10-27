@@ -1,5 +1,6 @@
 {% extends 'layout.html.j2' %}
 {% block content %}
+<div class="col-md-6">
     <div class="content-section">
         <form method="POST" action="">
             {{form.hidden_tag() }}
@@ -24,5 +25,5 @@
             </div> 
         </form>
     </div>
-    
+</div>   
 {% endblock content %}

@@ -1,17 +1,14 @@
 {% extends 'layout.html.j2' %}
 {% block content %}
-    {% for cu in clips_users %}
+    {% for clip in clips.items %}
        <article class="media content-section">
             <div class="media-body">
                 
-                <p class="article-content">{{ cu[0].clipping }}</p>
-                <div class="article-metadata">
-                <small class="text-muted">{{ cu[0].author }} - {{ cu[0].title }}</small>
-                </div>
-                <div class="article-metadata">
-                <small class="text-muted">Added by: <a href=#>{{ cu[1].username }}</a></small>
-                <small class="text-muted">on {{ cu[0].date.strftime('%d-%m-%Y') }}</small>
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + cu[1].image_file) }}">
+                <p class="article-content">{{ clip.clipping }}</p>
+                <div class="article-metadata" >
+                <span class="text-muted">{{ clip.title }} - {{ clip.author }} </span>
+                <span class="text-muted" style="position: absolute; right: 35px;">
+                        Page {{ clip.page }} --- {{ clip.date.strftime("%d/%m/%y") }} </span>
                 </div>
             </div>
         </article>
@@ -31,4 +28,16 @@
     {% endfor %}
     
 {% endblock content %}
-    
+
+{% block left_sidebar %}
+            <ul class="list-group">
+            {% for book in books%}
+                <li class="list-group-item list-group-item-light">
+                <a href="{{url_for('clips.user_book', username=user.username, title=book.title)}}">
+                {{book.title}} </a></li>
+            {% endfor %}
+            </ul>
+
+           
+
+{% endblock left_sidebar %}
