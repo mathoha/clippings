@@ -1,0 +1,6 @@
+Part of the code is sourced from https://www.redblobgames.com/pathfinding/a-star/implementation.html, with significant changes by me. 
+
+The program runs by reading the text file from stdin:
+Ex: python3 a_star.py < board-1-2.txt
+To run the program for task two simply change the import statement in line #5 from input_parser to input_parser2
+

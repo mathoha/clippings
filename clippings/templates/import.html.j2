@@ -1,0 +1,25 @@
+{% extends 'layout.html.j2' %}
+{% block content %}
+    
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{form.hidden_tag() }}
+        <fieldset class ="form_group">
+            <legend class="border_bottom mb-4">Import Clippings from Kindle</legend>
+            <div class="form-group">
+                {{ form.clips_file.label() }}   
+                {{ form.clips_file(class="form-control-file") }}  
+                 {% if form.clips_file.errors %}   
+                    {% for error in form.clips_file.errors %}
+                        <span class="text-danger">{{ error }}<span></br> 
+                    {% endfor %}      
+                {% endif %} 
+            </div>       
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info")}}
+        </div> 
+    </form>
+</div>
+    
+{% endblock content %}
