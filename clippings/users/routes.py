@@ -24,14 +24,14 @@ def register():
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('clips.user', username=current_user.username))
+        return redirect(url_for('clips.user_book', username=current_user.username))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('clips.user', username=current_user.username))
+            return redirect(next_page) if next_page else redirect(url_for('clips.user_book', username=current_user.username))
         else:
             flash(f"Login failed for {form.email.data}. Please check email and password", 'danger')
     return render_template('login.html.j2', title='Login', form=form)

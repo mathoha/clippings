@@ -20,9 +20,9 @@
 
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-            <div class="container">
+            <div class="container-fluid">
             {% if current_user.is_authenticated %}
-            <a class="navbar-brand mr-4" href="{{url_for('clips.user', username=current_user.username)}}">Clippings</a>
+            <a class="navbar-brand mr-4" href="{{url_for('clips.user_book', username=current_user.username)}}">Clippings</a>
             {% else %}
             <a class="navbar-brand mr-4" href="{{url_for('clips.discover')}}">Clippings</a>
             {% endif %} 
@@ -54,10 +54,8 @@
             </div>
         </nav>
     </header>
-    <main role="main" class="container">
-        <div class="row">
-            
-            
+    <main role="main" class="container-fluid">
+            <div class=row>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages%}
                         {% for category, message in messages%}
@@ -67,13 +65,19 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                
-                {% block content %}{% endblock %}
+            </div> 
+            
+            <div class=row> 
+                <div class="col-9">
+                    {% block content_header %}{% endblock %}       
+                    {% block content %}{% endblock %}
+                </div>
 
-           
-                {% block left_sidebar %}{% endblock %}
-            
-            
+                <div class="col-3"> 
+                    {% block sidebar_header %}{% endblock %}  
+                    {% block left_sidebar %}{% endblock %}
+                </div>
+            </div>
         </div>
     </main>
 

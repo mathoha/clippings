@@ -29,28 +29,35 @@ def import_clips():
 
     return render_template('import.html.j2', title='Import', form=form)
 
+order_by = {
+    'page.asc()': Clip.page.asc(),
+    'page.desc()': Clip.page.desc(),
+    'date.asc()': Clip.date.asc(),
+    'date.desc()': Clip.date.desc(),
+    'author.asc()': Clip.author.asc(),
+    'author.desc()': Clip.author.desc(),
+    'title.asc()': Clip.author.asc(),
+    'title.desc()': Clip.author.desc()
+}
 
-@clips.route("/<string:username>")
-def user(username):
+
+@clips.route("/<string:username>", methods=['GET', 'POST'])
+@clips.route("/<string:username>/<string:title>", methods=['GET', 'POST'])
+def user_book(username, title=None):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    clips = Clip.query.filter_by(user_id=user.id).order_by(Clip.date.desc()).paginate(per_page=30, page=page)
-    books = Clip.query.filter_by(user_id=user.id).order_by(Clip.date.desc()).group_by(Clip.title).distinct(Clip.title)
-    clips1 = clips.items[0:(len(clips.items)//2):1]
-    clips2 = clips.items[(len(clips.items)//2)::1]
-    return render_template('user_book.html.j2', clips=clips, clips1=clips1 , clips2=clips2, user=user, books=books)
-
-
-
-@clips.route("/<string:username>/<string:title>")
-def user_book(username, title):
-    user = User.query.filter_by(username=username).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    clips = Clip.query.filter_by(user_id=user.id, title=title).order_by(Clip.page.asc()).paginate(per_page=30, page=page)
-    clips1 = clips.items[0:(len(clips.items)//2):1]
-    clips2 = clips.items[(len(clips.items)//2)::1]
-    books = Clip.query.filter_by(user_id=user.id).order_by(Clip.date.desc()).group_by(Clip.title).distinct(Clip.title)
-    return render_template('user_book.html.j2', clips=clips, clips1=clips1 , clips2=clips2, user=user, books=books, title_selected=title)
+    clip_order = request.args.get('order_by', 'date.desc()')
+    book_order = request.args.get('book_order', 'date.desc()')
+    order = order_by.get(clip_order)
+    b_order = order_by.get(book_order)
+    if(title == None):
+        clips = Clip.query.filter_by(user_id=user.id).order_by(order).paginate(per_page=30, page=page)
+    else:
+        clip_order = request.args.get('order_by', 'page.asc()')
+        order = order_by.get(clip_order) 
+        clips = Clip.query.filter_by(user_id=user.id, title=title).order_by(order).paginate(per_page=30, page=page)
+    books = Clip.query.filter_by(user_id=user.id).order_by(b_order).group_by(Clip.title).distinct(Clip.title)
+    return render_template('user_book.html.j2', clips=clips, user=user, books=books, title_selected=title, order_by=clip_order, book_order=book_order)
 
 
 
