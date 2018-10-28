@@ -1,4 +1,12 @@
 {% extends 'layout.html.j2' %}
+
+{% block content_header %}
+
+{% include 'clip_sort.html.j2' with context%}
+
+{% endblock content_header %}
+
+
 {% block content %}
 
 <div class="card-columns"> 
@@ -8,17 +16,18 @@
                
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                    <p>{{ clip.clipping }}</p>
-                    <span class="badge float-right">❤</span>
+                        <p>{{ clip.clipping }}</p>
+                        <span class="badge float-right">❤</span>
+                        
+                        <footer class="blockquote-footer">
+                            <cite title="title, author"> {{ clip.title }}
+                                <small>{{ clip.author }}</small>
+                            </cite>
+                        </footer>
                     
-                    <footer class="blockquote-footer">
-                    <cite title="title - author"> {{ clip.title }}</cite>
-                    <small title="title - author">{{ clip.author }}</small>
+                        <div class="badge"> Page {{ clip.page }} </div>
+                        <span class="badge float-right">{{ clip.date.strftime("%d/%m/%y") }}</span>
                     </blockquote>
-                    
-                    <div class="badge "> Page {{ clip.page }} </div>
-                    <span class="badge float-right">{{ clip.date.strftime("%d/%m/%y") }}</span>
-                  </footer>
                 </div>
         </div>
         {% endfor %}
@@ -29,9 +38,9 @@
         {% for page_num in clips.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num %}
                         {% if clips.page == page_num %}
-                            <a class="btn btn-info mb-4" href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num)}}">{{page_num}}</a>
+                            <a class="btn btn-info mb-4" href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by)}}">{{page_num}}</a>
                         {% else %}
-                            <a class="btn btn-outline-info mb-4" href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num)}}">{{page_num}}</a>
+                            <a class="btn btn-outline-info mb-4" href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by)}}">{{page_num}}</a>
                         {% endif %}
                         
                     {% else %}
@@ -47,17 +56,25 @@
 {% endblock content %}
 
 
+{% block sidebar_header %}
+    {% include 'book_sort.html.j2' with context%}   
+{% endblock sidebar_header %}  
+
+
 {% block left_sidebar %}
      
             <ul class="list-group">
+            <a href="{{url_for('clips.user_book', username=user.username)}}">
+                    <li class="list-group-item list-group-item-light"> 	&uarr; All Books</li></a>
             {% for book in books%}
                 {% if book.title == title_selected%}
-                    <li class="list-group-item list-group-item-dark"> {{book.title}} </li>
+                    <a href="{{url_for('clips.user_book', username=user.username)}}">
+                    <li class="list-group-item list-group-item-dark">{{book.title}}</li></a>
                 {% else %}
-                <a href="{{url_for('clips.user_book', username=user.username, title=book.title)}}">
-                    <li class="list-group-item list-group-item-light">
-                    
-                    {{book.title}}</li>  </a>
+                    <a href="{{url_for('clips.user_book', username=user.username, title=book.title)}}">
+                    <li class="list-group-item list-group-item-light">{{book.title}}
+                    - <small>{{ book.author }}</small></li>
+                    </a>
                 {% endif %}
             {% endfor %}
             
