@@ -50,14 +50,20 @@ def user_book(username, title=None):
     book_order = request.args.get('book_order', 'date.desc()')
     order = order_by.get(clip_order)
     b_order = order_by.get(book_order)
+    clips_count = 0
     if(title == None):
         clips = Clip.query.filter_by(user_id=user.id).order_by(order).paginate(per_page=30, page=page)
+        #seems inefficient to query again for count:
+        clips_count = Clip.query.filter_by(user_id=user.id).count()
     else:
         clip_order = request.args.get('order_by', 'page.asc()')
         order = order_by.get(clip_order) 
         clips = Clip.query.filter_by(user_id=user.id, title=title).order_by(order).paginate(per_page=30, page=page)
+        clips_count = Clip.query.filter_by(user_id=user.id, title=title).count()
     books = Clip.query.filter_by(user_id=user.id).order_by(b_order).group_by(Clip.title).distinct(Clip.title)
-    return render_template('user_book.html.j2', clips=clips, user=user, books=books, title_selected=title, order_by=clip_order, book_order=book_order)
+    books_count = Clip.query.filter_by(user_id=user.id).order_by(b_order).group_by(Clip.title).distinct(Clip.title).count()
+    return render_template('user_book.html.j2', clips=clips, user=user, books=books, title_selected=title,
+                           order_by=clip_order, book_order=book_order, clips_count=clips_count, books_count=books_count)
 
 
 

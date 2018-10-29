@@ -2,18 +2,18 @@
 
 <div class="row" style="margin-right:3px; margin-left: 3px;">
 
-    <button type="button" class="btn btn-outline-dark">{{user.username}}</button>
+    
+    <button type="button" class="btn btn-light">
+    <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+    {{user.username}}</button>
   
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-secondary btn-light">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked> Following
-        </label>
-        <label class="btn btn-secondary btn-light">
-            <input type="radio" name="options" id="option2" autocomplete="off"> Likes
-        </label>
-        <label class="btn btn-secondary btn-light">
-            <input type="radio" name="options" id="option3" autocomplete="off"> Favorites
-        </label>
+        <button class="btn btn-secondary btn-light active">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> All ({{(clips_count)}})
+        </button>
+        <button class="btn btn-secondary btn-light">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> Hearts 
+        </button>
     </div>
 
         <button class="btn btn-secondary btn-light dropdown-toggle ml-auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
