@@ -50,7 +50,9 @@ class Clip(db.Model):
     location = db.Column(db.String(20), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     clipping = db.Column(db.Text, nullable=False)
+    is_favorite = db.Column(db.Boolean, default=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
 
     def __repr__(self):
-        return f"Post('{self.title}','{self.text[:150]}...')"
+        return f"Post('{self.title}: {self.clipping}')"

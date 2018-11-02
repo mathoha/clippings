@@ -8,34 +8,34 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             {% if order_by == 'date.asc()' %}
-                <a class="dropdown-item active" href="{{url_for('clips.user_book', order_by='date.asc()', book_order='date.asc()', username=user.username, title=title_selected, page=page_num)}}">	&uarr; Date</a>
+                <a class="dropdown-item active" href="{{url_for('clips.user_book',  order_by=order_by, book_order='date.asc()', username=user.username, title=title_selected, page=page_num)}}">	&uarr; Date</a>
             {% else %} 
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='date.asc()', book_order='date.asc()',  username=user.username, title=title_selected, page=page_num)}}">	&uarr; Date</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='date.asc()',  username=user.username, title=title_selected, page=page_num)}}">	&uarr; Date</a>
             {% endif %}
             {% if order_by == 'date.desc()' %}            
-                <a class="dropdown-item active" href="{{url_for('clips.user_book', order_by='date.desc()', book_order='date.desc()',  username=user.username, title=title_selected, page=page_num)}}">	&darr; Date</a>
+                <a class="dropdown-item active" href="{{url_for('clips.user_book',  order_by=order_by, book_order='date.desc()',  username=user.username, title=title_selected, page=page_num)}}">	&darr; Date</a>
             {% else %}
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='date.desc()', book_order='date.desc()',  username=user.username, title=title_selected, page=page_num)}}">	&darr; Date</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='date.desc()',  username=user.username, title=title_selected, page=page_num)}}">	&darr; Date</a>
             {% endif %}
             {% if order_by == 'author.asc()' %}
-                <a class="dropdown-item active" href="{{url_for('clips.user_book', order_by='author.asc()', book_order='author.asc()',  username=user.username, title=title_selected, page=page_num)}}">	&uarr; Author</a>
+                <a class="dropdown-item active" href="{{url_for('clips.user_book',  order_by=order_by, book_order='author.asc()',  username=user.username, title=title_selected, page=page_num)}}">	&uarr; Author</a>
             {% else %}
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='author.asc()', book_order='author.asc()',  username=user.username, title=title_selected, page=page_num)}}">	&uarr; Author</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='author.asc()',  username=user.username, title=title_selected, page=page_num)}}">	&uarr; Author</a>
             {% endif %}
             {% if order_by == 'author.desc()' %}
-                <a class="dropdown-item active" href="{{url_for('clips.user_book', order_by='author.desc()', book_order='author.desc()',  username=user.username, title=title_selected, page=page_num)}}"> &darr; Author</a>
+                <a class="dropdown-item active" href="{{url_for('clips.user_book',  order_by=order_by, book_order='author.desc()',  username=user.username, title=title_selected, page=page_num)}}"> &darr; Author</a>
             {% else %}
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='author.desc()', book_order='author.desc()', username=user.username, title=title_selected, page=page_num)}}"> &darr; Author</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='author.desc()', username=user.username, title=title_selected, page=page_num)}}"> &darr; Author</a>
             {% endif %}
             {% if order_by == 'title.asc()' %}
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='title.asc()', book_order='title.asc()', username=user.username, title=title_selected, page=page_num)}}">	&uarr; Title</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='title.asc()', username=user.username, title=title_selected, page=page_num)}}">	&uarr; Title</a>
             {% else %}
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='title.asc()', book_order='title.asc()', username=user.username, title=title_selected, page=page_num)}}">	&uarr; Title</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='title.asc()', username=user.username, title=title_selected, page=page_num)}}">	&uarr; Title</a>
             {% endif %}
             {% if order_by == 'title.asc()' %}            
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='title.desc()', book_order='title.desc()', username=user.username, title=title_selected, page=page_num)}}">	&darr; Title</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='title.desc()', username=user.username, title=title_selected, page=page_num)}}">	&darr; Title</a>
             {% else %}
-                <a class="dropdown-item" href="{{url_for('clips.user_book', order_by='title.desc()', book_order='title.desc()', username=user.username, title=title_selected, page=page_num)}}">	&darr; Title</a>
+                <a class="dropdown-item" href="{{url_for('clips.user_book',  order_by=order_by, book_order='title.desc()', username=user.username, title=title_selected, page=page_num)}}">	&darr; Title</a>
             {% endif %}
         </div>
 

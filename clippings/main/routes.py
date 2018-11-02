@@ -10,7 +10,7 @@ main = Blueprint('main', __name__)
 @main.route("/home")
 @login_required
 def home():
-    db.create_all() #this bootstraps the database within the same thread, a workaround for the test version
+    
     page = request.args.get('page', 1, type=int)
     clips = Clip.query.filter_by(user_id=current_user.id).order_by(Clip.date.desc()).paginate(per_page=7, page=page)
     books = Clip.query.filter_by(user_id=current_user.id).order_by(Clip.date.desc()).group_by(Clip.title).distinct(Clip.title)
@@ -25,4 +25,5 @@ def about():
 @main.route("/")
 @main.route("/landing")
 def landing():
+    db.create_all() #this bootstraps the database within the same thread, a workaround for the test version
     return render_template('about.html.j2')

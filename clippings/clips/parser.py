@@ -41,6 +41,7 @@ def parse_file(full_path, db, current_user):
     with open(full_path, 'r') as f:
         lines = list(f)
         i = 0
+        count = 0
         for line in lines:
             if (i%5 == 0):
                 title, author = parse_title_author(line)
@@ -55,5 +56,7 @@ def parse_file(full_path, db, current_user):
                             clipping=clipping,
                             user_id=current_user.id)
                 db.session.add(clip)
-                db.session.commit()
+                count +=1
             i +=1
+        db.session.commit()
+        return count

@@ -2,11 +2,15 @@ import os
 from flask import Blueprint
 from flask import render_template, url_for, flash, redirect, request, current_app
 from flask_login import login_user, current_user, logout_user, login_required
+from werkzeug.utils import secure_filename
+
 from clippings import db
 from clippings.models import Clip, User
 from clippings.clips.forms import UploadFileForm
 from clippings.clips.parser import parse_file
-from werkzeug.utils import secure_filename
+from clippings.clips.utils import add_favorite
+
+
 
 clips = Blueprint('clips', __name__)
 
@@ -17,13 +21,14 @@ def import_clips():
     form = UploadFileForm()
     if form.validate_on_submit():
         if form.clips_file.data:
-            flash('10 new clippings added!', 'success')
+            
             
             file_path = os.path.join('clippings/clips', 'temp.txt')
             form.clips_file.data.save(file_path)
             full_path = os.path.join(current_app.root_path, 'clips', 'temp.txt')
             print(full_path)
-            parse_file(full_path, db, current_user)
+            count = parse_file(full_path, db, current_user)
+            flash(f'{count} new clippings added!', 'success')
             return redirect(url_for('main.home'))
 
 
@@ -51,19 +56,30 @@ def user_book(username, title=None):
     order = order_by.get(clip_order)
     b_order = order_by.get(book_order)
     clips_count = 0
+    favorite_id = request.args.get('favorite_id')
+    show_favorites = request.args.get('favorite')
+    if(favorite_id):
+        add_favorite(favorite_id)
     if(title == None):
         clips = Clip.query.filter_by(user_id=user.id).order_by(order).paginate(per_page=30, page=page)
         #seems inefficient to query again for count:
         clips_count = Clip.query.filter_by(user_id=user.id).count()
+        favorite_count = Clip.query.filter_by(user_id=user.id, is_favorite=True).count()
+        if(show_favorites):
+            clips = Clip.query.filter_by(user_id=user.id, is_favorite=True).order_by(order).paginate(per_page=30, page=page)
     else:
         clip_order = request.args.get('order_by', 'page.asc()')
         order = order_by.get(clip_order) 
         clips = Clip.query.filter_by(user_id=user.id, title=title).order_by(order).paginate(per_page=30, page=page)
         clips_count = Clip.query.filter_by(user_id=user.id, title=title).count()
+        favorite_count = Clip.query.filter_by(user_id=user.id, title=title, is_favorite=True).count()
+        if(show_favorites):
+            clips = Clip.query.filter_by(user_id=user.id, title=title, is_favorite=True).order_by(order).paginate(per_page=30, page=page)
     books = Clip.query.filter_by(user_id=user.id).order_by(b_order).group_by(Clip.title).distinct(Clip.title)
     books_count = Clip.query.filter_by(user_id=user.id).order_by(b_order).group_by(Clip.title).distinct(Clip.title).count()
     return render_template('user_book.html.j2', clips=clips, user=user, books=books, title_selected=title,
-                           order_by=clip_order, book_order=book_order, clips_count=clips_count, books_count=books_count)
+                           order_by=clip_order, book_order=book_order, clips_count=clips_count, books_count=books_count,
+                           add_favorite=add_favorite, favorite_count=favorite_count, favorite=show_favorites)
 
 
 
@@ -79,3 +95,4 @@ def discover():
     clips_users = list(clips_users_zip)
 
     return render_template('discover.html.j2', clips_users=clips_users, clips=clips)
+
