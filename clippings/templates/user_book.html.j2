@@ -18,9 +18,17 @@
                     <blockquote class="blockquote mb-0">
                         <p>{{ clip.clipping }}</p>
                         {% if clip.is_favorite %}
-                        <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="badge float-right">❤</span></a>
+                            {% if user == current_user%}
+                                <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="badge float-right">❤</span></a>
+                            {% else %}
+                                <span class="badge float-right">❤</span>
+                            {% endif %}
                         {% else %}
-                        <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="float-right">♡</span></a>
+                            {% if user == current_user%}
+                                <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="badge float-right">♡</span></a>
+                             {% else %}
+                                <span class="badge float-right">♡</span>
+                            {% endif %}
                         {% endif %}
                         <footer class="blockquote-footer">
                             <cite title="title, author"> {{ clip.title }}
@@ -71,12 +79,12 @@
                     <li class="list-group-item list-group-item-light"> 	&uarr; All Books ({{(books_count)}})</li></a>
             {% for book in books%}
                 {% if book.title == title_selected%}
-                    <a href="{{url_for('clips.user_book', username=user.username)}}">
+                    <a href="{{url_for('clips.user_book', username=user.username, order_by=order_by, book_order=book_order)}}">
                     <li class="list-group-item list-group-item-dark">{{book.title}}
                     - <small>{{ book.author }}</small></li></a>
                     
                 {% else %}
-                    <a href="{{url_for('clips.user_book', username=user.username, title=book.title)}}">
+                    <a href="{{url_for('clips.user_book', username=user.username, title=book.title, order_by='page.asc()', book_order=book_order)}}">
                     <li class="list-group-item list-group-item-light">{{book.title}}</li>
                     </a>
                 {% endif %}
