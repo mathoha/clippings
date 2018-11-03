@@ -8,6 +8,13 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+#helper table for many to many relationship between user and clips. likes and liked_by
+likes = db.Table('likes',
+    db.Column('clip_id', db.Integer, db.ForeignKey('clip.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+)
+    
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -15,6 +22,8 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+    likes = db.relationship('Clip', secondary=likes, backref='liked_by', lazy=True)
+
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.root_path.config['SECRET_KEY'], expires_sec)
@@ -56,3 +65,4 @@ class Clip(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}: {self.clipping}')"
+

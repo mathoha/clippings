@@ -86,7 +86,7 @@ def user_book(username, title=None):
 @clips.route("/discover", methods=['GET', 'POST'])
 def discover():
     page = request.args.get('page', 1, type=int)
-    clips = Clip.query.order_by(Clip.date.desc()).paginate(per_page=70, page=page)
+    clips = Clip.query.order_by(Clip.page.asc()).paginate(per_page=70, page=page)
     users = []
     for clip in clips.items:
         user = User.query.get(clip.user_id)
@@ -95,4 +95,13 @@ def discover():
     clips_users = list(clips_users_zip)
 
     return render_template('discover.html.j2', clips_users=clips_users, clips=clips)
+
+
+@clips.route("/discover1", methods=['GET', 'POST'])
+def discover1():
+    page = request.args.get('page', 1, type=int)
+    clips = Clip.query.order_by(Clip.page.asc()).paginate(per_page=70, page=page)
+
+    return render_template('discover.html.j2', clips=clips)
+
 

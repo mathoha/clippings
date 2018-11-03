@@ -1,13 +1,16 @@
 {% extends 'layout.html.j2' %}
 {% block content %}
     
-<div class="content-section col-md-5 offset-md-6">
+<div class="content-section col-md-9 offset-md-4">
     <form method="POST" action="" enctype="multipart/form-data">
         {{form.hidden_tag() }}
         <fieldset class ="form_group">
-            <legend class="border_bottom mb-4">Import Clippings from Kindle</legend>
+            <legend class="border_bottom">Import Clippings from Kindle</legend>
+            <p class="">Expected format for Kindle clippings:</p>
+            <img class="format-img" src="{{ url_for('static', filename='images/' + 'kindle-format.png') }}">   
+
             <div class="form-group">
-                {{ form.clips_file.label() }}   
+                {{ form.clips_file.label() }}
                 {{ form.clips_file(class="form-control-file") }}  
                  {% if form.clips_file.errors %}   
                     {% for error in form.clips_file.errors %}
