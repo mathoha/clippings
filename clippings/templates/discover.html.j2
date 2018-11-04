@@ -25,8 +25,10 @@
         <div class="card" style="">
 
                 <div class="card-header">
-                <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + cu[1].image_file) }}">
-                {{cu[1].username}}
+                <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.user_book', username=cu[1].username, title=cu[0].title)}}">
+                    <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + cu[1].image_file) }}">
+                    <span>{{cu[1].username}}</span>
+                </a>
                 <span class="float-right" style="font-size:1.5rem;">55 </span>
                 <span class="badge float-right" style="font-size:1.5rem;">&#x2606;</span>
                 </div>
@@ -35,14 +37,17 @@
                     <blockquote class="blockquote mb-0">
                         <p>{{ cu[0].clipping }}</p>
                         
-                        <footer class="blockquote-footer">
-                            <cite title="title, author"> {{ cu[0].title }}
-                                <small>{{ cu[0].author }}</small>
-                            </cite>
-                        </footer>
-                    
-                        <div class="badge"> Page {{ cu[0].page }} </div>
-                        <span class="badge float-right">{{ cu[0].date.strftime("%-d %b %Y") }}</span>
+                        <a class="no-style" href="{{url_for('clips.user_book', username=cu[1].username, title=cu[0].title)}}"> 
+                            <footer class="blockquote-footer">
+                                <cite>
+                                {{ cu[0].title }}
+                                    <small>{{ cu[0].author }}</small>
+                                </cite>
+                            </footer>
+                        </a>
+                            <div class="badge"> Page {{ cu[0].page }} </div>
+                            <span class="badge float-right">{{ cu[0].date.strftime("%-d %b %Y") }}</span>
+                        
                     </blockquote>
                 </div>
 
@@ -70,7 +75,49 @@
     </div>
 
     
-    
-
 {% endblock content %}
 
+
+{% block left_sidebar %}
+
+    <div class="card text-center mb-3" style="min-width: 100%;">
+        <div class="navbar navbar-light mt-3">
+            
+            <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='username')}}">
+            <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> name</span>
+            </a>
+            <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='clips_count')}}">
+            <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> popular</span>
+            </a>
+            <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='last_active')}}">
+            <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> activity</span>
+            </a>
+            <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='books_count')}}">
+            <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> books</span>
+            </a>
+            <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='clips_count')}}">
+            <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> clips</span>
+            </a>
+            
+            
+        </div>
+     </div>
+     
+            <ul class="list-group">
+            {% for user in users|sort(attribute=sort_attribute, reverse=reverse) %}
+                    <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.user_book', username=user.username)}}">
+                    <li class="list-group-item">
+                        <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+                            <span>{{user.username}}</span>
+                            
+                            <span class="float-right" style="font-size:1.2rem;"> <i class="far fa-file-alt"></i> {{user.clips_count}} </span>
+                            <span class="float-right mr-3" style="font-size:1.2rem;"> <i class="fas fa-book-open"></i> {{user.books_count}} </span>
+                            <span class="float-right mr-3" style="font-size:1.2rem;"> {{user.last_active}} days ago </span>
+                            <span class="float-right mr-5" style="font-size:1.2rem;"> <i class="fas fa-dog"></i> {{user.followers}} </span>
+                    </li>
+                    </a>
+        
+            {% endfor %}
+            
+            </ul>
+{% endblock left_sidebar %}
