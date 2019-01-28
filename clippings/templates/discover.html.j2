@@ -35,7 +35,7 @@
 
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                        <p>{{ cu[0].clipping }}</p>
+                        <p style="font-size:1.1rem;">{{ cu[0].clipping }}</p>
                         
                         <a class="no-style" href="{{url_for('clips.user_book', username=cu[1].username, title=cu[0].title)}}"> 
                             <footer class="blockquote-footer">
@@ -83,9 +83,7 @@
     <div class="card text-center mb-3" style="min-width: 100%;">
         <div class="navbar navbar-light mt-3">
             
-            <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='username')}}">
-            <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> name</span>
-            </a>
+
             <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.discover', reverse=(0 if reverse else 1), sort='clips_count')}}">
             <span class="" style="font-size:1.3rem;"><i class="fas fa-sort"></i> popular</span>
             </a>
@@ -109,11 +107,15 @@
                     <li class="list-group-item">
                         <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
                             <span>{{user.username}}</span>
-                            
-                            <span class="float-right" style="font-size:1.2rem;"> <i class="far fa-file-alt"></i> {{user.clips_count}} </span>
-                            <span class="float-right mr-3" style="font-size:1.2rem;"> <i class="fas fa-book-open"></i> {{user.books_count}} </span>
-                            <span class="float-right mr-3" style="font-size:1.2rem;"> {{user.last_active}} days ago </span>
-                            <span class="float-right mr-5" style="font-size:1.2rem;"> <i class="fas fa-dog"></i> {{user.followers}} </span>
+                    </li>
+                    <li class="list-group-item">
+                    <span></span>
+                    <span class="mt-0" style="font-size:1.0rem;"> <i class="fas fa-dog"></i> {{user.followers}} </span>
+                    <span class="mr-1 float-right" style="font-size:1.0rem;"> <i class="far fa-file-alt"></i> {{user.clips_count}} </span>
+                    <span class="mr-4 float-right" style="font-size:1.0rem;"> <i class="fas fa-book-open"></i> {{user.books_count}} </span>
+                    <span class="mr-4 float-right" style="font-size:1.0rem;"> {{user.last_active}} days</span>
+                    
+                
                     </li>
                     </a>
         

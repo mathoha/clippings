@@ -16,7 +16,8 @@
                
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                        <p>{{ clip.clipping }}</p>
+                        <p style="font-size:1.1rem;">{{ clip.clipping }}</p>
+                        <a class="no-style" href="{{url_for('clips.user_book', username=user.username, title=clip.title)}}"> 
                         {% if clip.is_favorite %}
                             {% if user == current_user%}
                                 <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="badge float-right">❤</span></a>
@@ -31,10 +32,11 @@
                             {% endif %}
                         {% endif %}
                         <footer class="blockquote-footer">
-                            <cite title="title, author"> {{ clip.title }}
+                            <cite> {{ clip.title }}
                                 <small>{{ clip.author }}</small>
                             </cite>
                         </footer>
+                        </a>
                     
                         <div class="badge"> Page {{ clip.page }} </div>
                         <span class="badge float-right">{{ clip.date.strftime("%-d %b %Y") }}</span>
@@ -72,7 +74,7 @@
 {% endblock sidebar_header %}  
 
 
-{% block left_sidebar %}
+{% block right_sidebar %}
      
             <ul class="list-group">
             <a href="{{url_for('clips.user_book', username=user.username)}}">
@@ -91,4 +93,4 @@
             {% endfor %}
             
             </ul>
-{% endblock left_sidebar %}
+{% endblock right_sidebar %}

@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Blueprint
 from flask import render_template, url_for, flash, redirect, request, current_app
 from flask_login import login_user, current_user, logout_user, login_required
@@ -34,6 +35,7 @@ def import_clips():
 
     return render_template('import.html.j2', title='Import', form=form)
 
+# dictionary with functions that order the clips
 order_by = {
     'page.asc()': Clip.page.asc(),
     'page.desc()': Clip.page.desc(),
@@ -86,6 +88,10 @@ def user_book(username, title=None):
 @clips.route("/discover", methods=['GET', 'POST'])
 def discover():
     page = request.args.get('page', 1, type=int)
+    sort_attribute = request.args.get('sort', 'last_active')
+    reverse = request.args.get('reverse', 0, type=int)
+    
+
     clips = Clip.query.order_by(Clip.page.asc()).paginate(per_page=70, page=page)
     users = []
     for clip in clips.items:
@@ -93,8 +99,21 @@ def discover():
         users.append(user)
     clips_users_zip = zip(clips.items,users)
     clips_users = list(clips_users_zip)
+    
+    users = User.query.order_by(User.username.asc())
+    for user in users:
+        clips_count = Clip.query.filter_by(user_id=user.id).count()
+        books_count = Clip.query.filter_by(user_id=user.id).group_by(Clip.title).distinct(Clip.title).count()
+        last_active = Clip.query.filter_by(user_id=user.id).order_by(Clip.date.desc()).first()
+        timedelta = datetime.utcnow() - last_active.date
+        user.clips_count = clips_count
+        user.books_count = books_count
+        user.last_active = timedelta.days
 
-    return render_template('discover.html.j2', clips_users=clips_users, clips=clips)
+        user.followers = 2
+    
+
+    return render_template('discover.html.j2', clips_users=clips_users, clips=clips, users=users, sort_attribute=sort_attribute, reverse=reverse)
 
 
 @clips.route("/discover1", methods=['GET', 'POST'])
