@@ -9,7 +9,7 @@ from clippings import db
 from clippings.models import Clip, User
 from clippings.clips.forms import UploadFileForm
 from clippings.clips.parser import parse_file
-from clippings.clips.utils import add_favorite
+from clippings.clips.utils import add_favorite, add_like, remove_like
 
 
 
@@ -90,14 +90,36 @@ def discover():
     page = request.args.get('page', 1, type=int)
     sort_attribute = request.args.get('sort', 'last_active')
     reverse = request.args.get('reverse', 0, type=int)
+    like_id = request.args.get('like_id')
+    dislike_id = request.args.get('dislike_id')
+
+    if(like_id):
+        add_like(like_id, current_user)
     
+    if(dislike_id):
+        remove_like(dislike_id, current_user)
 
     clips = Clip.query.order_by(Clip.page.asc()).paginate(per_page=70, page=page)
     users = []
+    likes_count = []
+    count = 0;
+
+    #for each clip add its user and the number of likes by other users
     for clip in clips.items:
         user = User.query.get(clip.user_id)
         users.append(user)
-    clips_users_zip = zip(clips.items,users)
+        
+        likes = Clip.query.join(User.likes).filter_by(id=clip.id).count()
+        liked_by_users = User.query.join(User.likes).filter_by(id=clip.id).all()
+
+        already_liked = False;
+        for x in liked_by_users:
+            if x.id == current_user.id:
+                already_liked = True;
+        likes_count.append([len(liked_by_users),already_liked])
+
+    #combine alle three lists 
+    clips_users_zip = zip(clips.items,users,likes_count)
     clips_users = list(clips_users_zip)
     
     users = User.query.order_by(User.username.asc())

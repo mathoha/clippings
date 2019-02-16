@@ -6,10 +6,10 @@
     <div class="card-header navbar navbar-light ">
         <ul class="nav nav-pills card-header-pills">
         <li class="nav-item">
-            <a class="nav-item nav-link active" nav-link active" href="#">Recent</a>
+            <a class="nav-link" href="{{url_for('clips.discover')}}">Recent</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Popular</a>
+            <a class="nav-link" href="{{url_for('clips.discover', popular='true')}}">Popular</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Hall of Fame</a>
@@ -25,12 +25,34 @@
         <div class="card" style="">
 
                 <div class="card-header">
-                <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.user_book', username=cu[1].username, title=cu[0].title)}}">
-                    <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + cu[1].image_file) }}">
-                    <span>{{cu[1].username}}</span>
-                </a>
-                <span class="float-right" style="font-size:1.5rem;">55 </span>
-                <span class="badge float-right" style="font-size:1.5rem;">&#x2606;</span>
+                    <a class="no-style" style="font-size:1.5rem;" href="{{url_for('clips.user_book', username=cu[1].username, title=cu[0].title)}}">
+                        <img class="rounded-circle header-img" src="{{ url_for('static', filename='profile_pics/' + cu[1].image_file) }}">
+                        <span>{{cu[1].username}}</span>
+                    </a>
+                    <!-- cu[2] is the number of likes that clip has. See discover route for where it comes from -->
+                    <span class="float-right" style="font-size:1.5rem;">{{cu[2][0]}}</span>
+                    <span class="float-right" style="font-size:2rem;">
+            
+
+                    <!-- Not able to like ones own clip-->
+                    {% if cu[1].id != current_user.id %}
+
+                        <!-- Check if current user has already liked that clip-->
+                        {% if cu[2][1] %}
+                            <a href="{{url_for('clips.discover', dislike_id=cu[0].id)}}"><span class="badge float-right">❤</span></a>
+                        {% else %}
+                            <a href="{{url_for('clips.discover', like_id=cu[0].id)}}"><span class="badge float-right">♡</span></a>
+                        {% endif %}
+                        
+                    {% else %}
+                        <span class="badge float-right">♡</span>
+                    
+
+                    {% endif %}
+
+                    
+                       
+                    </span>
                 </div>
 
                 <div class="card-body">
@@ -78,7 +100,7 @@
 {% endblock content %}
 
 
-{% block left_sidebar %}
+{% block right_sidebar %}
 
     <div class="card text-center mb-3" style="min-width: 100%;">
         <div class="navbar navbar-light mt-3">
@@ -122,4 +144,4 @@
             {% endfor %}
             
             </ul>
-{% endblock left_sidebar %}
+{% endblock right_sidebar %}
