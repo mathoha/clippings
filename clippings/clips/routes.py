@@ -94,7 +94,7 @@ def discover():
     dislike_id = request.args.get('dislike_id')
 
     if(like_id):
-        if (not User.is_anonymous): #prevent users not logged in from liking
+        if (User.is_authenticated): #prevent users not logged in from liking
             add_like(like_id, current_user)
     
     if(dislike_id):
@@ -114,7 +114,7 @@ def discover():
         liked_by_users = User.query.join(User.likes).filter_by(id=clip.id).all()
 
         already_liked = False;
-        if (not User.is_anonymous): #no need to do this when user is not logged in
+        if (User.is_authenticated): #no need to do this when user is not logged in
             for x in liked_by_users:
                 if x.id == current_user.id:
                     already_liked = True;
