@@ -17,26 +17,36 @@
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
                         <p style="font-size:1.1rem;">{{ clip.clipping }}</p>
-                        <a class="no-style" href="{{url_for('clips.user_book', username=user.username, title=clip.title)}}"> 
+                        
+                        
                         {% if clip.is_favorite %}
                             {% if user == current_user%}
-                                <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="badge float-right">❤</span></a>
+                                <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}">
+                                <span class="badge float-right">❤</span></a>
                             {% else %}
                                 <span class="badge float-right">❤</span>
                             {% endif %}
                         {% else %}
                             {% if user == current_user%}
-                                <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}"><span class="badge float-right">♡</span></a>
+                                <a href="{{url_for('clips.user_book', username=user.username, title=title_selected, page=page_num, order_by=order_by, favorite=favorite, favorite_id=clip.id)}}">
+                                <span class="badge float-right">♡</span></a>
                              {% else %}
                                 <span class="badge float-right">♡</span>
                             {% endif %}
+                        {% endif %}
+                        
+                        {% if title_selected != clip.title%}   
+                        <a class="no-style" href="{{url_for('clips.user_book', username=user.username, title=clip.title)}}"> 
                         {% endif %}
                         <footer class="blockquote-footer">
                             <cite> {{ clip.title }}
                                 <small>{{ clip.author }}</small>
                             </cite>
                         </footer>
+                        
+                        {% if title_selected != clip.title%}
                         </a>
+                        {% endif %}
                     
                         <div class="badge"> Page {{ clip.page }} </div>
                         <span class="badge float-right">{{ clip.date.strftime("%-d %b %Y") }}</span>
